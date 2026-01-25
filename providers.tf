@@ -1,0 +1,17 @@
+terraform {
+  required_providers {
+    snowflake = {
+      source  = "Snowflake-Labs/snowflake"
+      version = "~> 0.100"
+    }
+  }
+  required_version = ">= 1.0"
+}
+
+provider "snowflake" {
+  organization_name = var.snowflake_organization
+  account_name      = var.snowflake_account_name
+  user              = var.snowflake_user
+  password          = var.snowflake_password
+  role              = var.snowflake_role
+}
