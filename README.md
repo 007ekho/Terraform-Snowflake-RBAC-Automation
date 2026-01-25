@@ -89,10 +89,7 @@ Terraform-Snowflake-RBAC-Automation/
 │   ├── users/            # Snowflake user management
 │   ├── roles/            # Role definitions and hierarchy
 │   └── grants/           # Privilege assignments
-├── environments/
-│   ├── dev/              # Development environment
-│   ├── staging/          # Staging / pre-production
-│   └── prod/             # Production environment
+
 ├── provider.tf           # Snowflake provider configuration
 ├── variables.tf          # Global input variables
 ├── outputs.tf            # Exposed outputs
