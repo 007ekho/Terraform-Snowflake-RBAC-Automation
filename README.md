@@ -29,14 +29,6 @@ The solution is designed for **data engineers, analytics engineers, and platform
 
 ---
 
-## 📊 Business Impact
-
-- **Reduced Operational Overhead**: Eliminates manual Snowflake access provisioning.  
-- **Improved Security Posture**: Enforces least-privilege access by design.  
-- **Audit & Compliance Ready**: All access changes are traceable through Git history.  
-- **Scalable Governance**: Supports growing teams, projects, and environments without added complexity.
-
----
 
 ## ✨ Key Features
 
@@ -57,6 +49,17 @@ Environment-specific configurations allow safe promotion of changes from develop
 
 ### 🔹 Version-Controlled Security
 All access changes are tracked through Git, providing a transparent audit trail.
+
+---
+
+
+## 📊 Business Impact
+
+- **Reduced Operational Overhead**: Eliminates manual Snowflake access provisioning.  
+- **Improved Security Posture**: Enforces least-privilege access by design.  
+- **Audit & Compliance Ready**: All access changes are traceable through Git history.  
+- **Scalable Governance**: Supports growing teams, projects, and environments without added complexity.
+
 
 ---
 
