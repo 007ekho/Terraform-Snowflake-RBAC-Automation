@@ -117,6 +117,13 @@ cd Terraform-Snowflake-RBAC-Automation
 # Select target environment
 cd environments/dev
 
+#Initialize creadentials 
+export SNOWFLAKE_ORGANIZATION="ORGNAME"
+export SNOWFLAKE_ACCOUNT="ACCOUNTNAME"
+export SNOWFLAKE_USER="your-username"
+export SNOWFLAKE_PASSWORD="your-password"
+export SNOWFLAKE_ROLE="ACCOUNTADMIN"  # Optional
+
 # Initialize Terraform (downloads providers and modules)
 terraform init
 
