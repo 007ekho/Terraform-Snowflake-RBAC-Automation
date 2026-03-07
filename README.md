@@ -138,7 +138,9 @@ terraform apply
 ## 👤 Author
 
 **Success Ekhosuehi**  
-GitHub: [@007ekho](https://github.com/007ekho)
+GitHub: https://github.com/007ekho
+LinkedIn: https://www.linkedin.com/in/suehi/
+
 
 
 
