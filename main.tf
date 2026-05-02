@@ -1,3 +1,18 @@
+# main.tf
+# Orchestrates all Snowflake RBAC modules
+
+terraform {
+  required_version = ">= 1.5.0"
+  
+  required_providers {
+    snowflake = {
+      source  = "Snowflake-Labs/snowflake"
+      version = "~> 0.68"
+    }
+  }
+}
+
+
 module "roles" {
   source = "./modules/roles"
   roles  = var.roles
@@ -30,3 +45,13 @@ module "object_grants" {
   
   depends_on = [module.roles]
 }
+
+
+
+# Optional: Add warehouse module if you want to manage compute
+# module "warehouse" {
+#   source = "./modules/warehouse"
+#   
+#   warehouse_name = "${var.environment}_WH"
+#   warehouse_size = var.warehouse_size
+# }
