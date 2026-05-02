@@ -1,16 +1,24 @@
+# environments/dev.tfvars
+# Development Environment Configuration
 
-environment = "dev"
+# ============================================
+# SNOWFLAKE CONNECTION (for provider)
+# ============================================
+# Note: These should be set via environment variables in CI/CD:
+# export TF_VAR_snowflake_organization="YOUR_ORG"
+# export TF_VAR_snowflake_account_name="YOUR_ACCOUNT"
+# export TF_VAR_snowflake_user="terraform_user"
+# export TF_VAR_snowflake_password="***"
+# export TF_VAR_snowflake_role="SECURITYADMIN"
 
 # ============================================
 # ROLES
 # ============================================
 roles = {
-  data_engineer_dev = {
-    name    = "DATA_ENGINEER_DEV"
+  DATA_ENGINEER_DEV = {
     comment = "Development data engineering role - full database access"
   }
-  data_analyst_dev = {
-    name    = "DATA_ANALYST_DEV"
+  DATA_ANALYST_DEV = {
     comment = "Development analytics role - read-only access"
   }
 }
@@ -20,25 +28,39 @@ roles = {
 # ============================================
 users = {
   dev_engineer = {
-    name                 = "dev.engineer@company.com"
+    login_name           = "dev.engineer@company.com"
     display_name         = "Dev Engineer"
+    email                = "dev.engineer@company.com"
     default_role         = "DATA_ENGINEER_DEV"
     must_change_password = false  # Dev convenience
   }
   dev_analyst = {
-    name                 = "dev.analyst@company.com"
+    login_name           = "dev.analyst@company.com"
     display_name         = "Dev Analyst"
+    email                = "dev.analyst@company.com"
     default_role         = "DATA_ANALYST_DEV"
     must_change_password = false
   }
 }
 
 # ============================================
-# ROLE HIERARCHY (role-to-role grants)
+# ROLE GRANTS (role-to-role and role-to-user)
 # ============================================
 role_grants = {
-  data_engineer_dev = {
-    roles = ["DATA_ANALYST_DEV"]  # Engineer inherits from Analyst
+  # Grant DATA_ANALYST_DEV to DATA_ENGINEER_DEV (hierarchy)
+  engineer_inherits_analyst_dev = {
+    roles = ["DATA_ANALYST_DEV"]
+    users = []
+  }
+  
+  # Grant roles to users
+  grant_engineer_role_dev = {
+    roles = ["DATA_ENGINEER_DEV"]
+    users = ["dev.engineer@company.com"]
+  }
+  grant_analyst_role_dev = {
+    roles = ["DATA_ANALYST_DEV"]
+    users = ["dev.analyst@company.com"]
   }
 }
 
@@ -46,20 +68,15 @@ role_grants = {
 # DATABASE GRANTS
 # ============================================
 database_grants = {
-  engineer_usage_dev = {
-    database_name = "ANALYTICS_DEV"
-    privilege     = "USAGE"
-    roles         = ["DATA_ENGINEER_DEV"]
+  engineer_db_usage_dev = {
+    role       = "DATA_ENGINEER_DEV"
+    database   = "ANALYTICS_DEV"
+    privileges = ["USAGE", "CREATE SCHEMA", "MONITOR"]
   }
-  engineer_create_schema_dev = {
-    database_name = "ANALYTICS_DEV"
-    privilege     = "CREATE SCHEMA"
-    roles         = ["DATA_ENGINEER_DEV"]
-  }
-  analyst_usage_dev = {
-    database_name = "ANALYTICS_DEV"
-    privilege     = "USAGE"
-    roles         = ["DATA_ANALYST_DEV"]
+  analyst_db_usage_dev = {
+    role       = "DATA_ANALYST_DEV"
+    database   = "ANALYTICS_DEV"
+    privileges = ["USAGE"]
   }
 }
 
@@ -67,23 +84,23 @@ database_grants = {
 # SCHEMA GRANTS
 # ============================================
 schema_grants = {
-  engineer_raw_usage_dev = {
-    database_name = "ANALYTICS_DEV"
-    schema_name   = "RAW"
-    privilege     = "USAGE"
-    roles         = ["DATA_ENGINEER_DEV"]
+  engineer_raw_schema_dev = {
+    role       = "DATA_ENGINEER_DEV"
+    database   = "ANALYTICS_DEV"
+    schema     = "RAW"
+    privileges = ["USAGE", "CREATE TABLE", "CREATE VIEW"]
   }
-  engineer_raw_create_table_dev = {
-    database_name = "ANALYTICS_DEV"
-    schema_name   = "RAW"
-    privilege     = "CREATE TABLE"
-    roles         = ["DATA_ENGINEER_DEV"]
+  engineer_staging_schema_dev = {
+    role       = "DATA_ENGINEER_DEV"
+    database   = "ANALYTICS_DEV"
+    schema     = "STAGING"
+    privileges = ["USAGE", "CREATE TABLE", "CREATE VIEW"]
   }
-  analyst_analytics_usage_dev = {
-    database_name = "ANALYTICS_DEV"
-    schema_name   = "ANALYTICS"
-    privilege     = "USAGE"
-    roles         = ["DATA_ANALYST_DEV"]
+  analyst_analytics_schema_dev = {
+    role       = "DATA_ANALYST_DEV"
+    database   = "ANALYTICS_DEV"
+    schema     = "ANALYTICS"
+    privileges = ["USAGE"]
   }
 }
 
@@ -91,17 +108,19 @@ schema_grants = {
 # ALL TABLES GRANTS (existing tables)
 # ============================================
 all_tables_grants = {
-  analyst_select_analytics_dev = {
-    database_name = "ANALYTICS_DEV"
-    schema_name   = "ANALYTICS"
-    privilege     = "SELECT"
-    roles         = ["DATA_ANALYST_DEV"]
+  analyst_select_all_analytics_dev = {
+    role           = "DATA_ANALYST_DEV"
+    database       = "ANALYTICS_DEV"
+    schema         = "ANALYTICS"
+    privileges     = ["SELECT"]
+    all_privileges = false
   }
-  engineer_select_raw_dev = {
-    database_name = "ANALYTICS_DEV"
-    schema_name   = "RAW"
-    privilege     = "SELECT"
-    roles         = ["DATA_ENGINEER_DEV"]
+  engineer_select_all_raw_dev = {
+    role           = "DATA_ENGINEER_DEV"
+    database       = "ANALYTICS_DEV"
+    schema         = "RAW"
+    privileges     = ["SELECT", "INSERT", "UPDATE", "DELETE"]
+    all_privileges = false
   }
 }
 
@@ -110,16 +129,16 @@ all_tables_grants = {
 # ============================================
 future_tables_grants = {
   analyst_future_select_dev = {
-    database_name = "ANALYTICS_DEV"
-    schema_name   = "ANALYTICS"
-    privilege     = "SELECT"
-    roles         = ["DATA_ANALYST_DEV"]
+    role       = "DATA_ANALYST_DEV"
+    database   = "ANALYTICS_DEV"
+    schema     = "ANALYTICS"
+    privileges = ["SELECT"]
   }
-  engineer_future_select_dev = {
-    database_name = "ANALYTICS_DEV"
-    schema_name   = "RAW"
-    privilege     = "SELECT"
-    roles         = ["DATA_ENGINEER_DEV"]
+  engineer_future_all_raw_dev = {
+    role       = "DATA_ENGINEER_DEV"
+    database   = "ANALYTICS_DEV"
+    schema     = "RAW"
+    privileges = ["SELECT", "INSERT", "UPDATE", "DELETE"]
   }
 }
 
@@ -127,35 +146,42 @@ future_tables_grants = {
 # WAREHOUSE GRANTS
 # ============================================
 warehouse_grants = {
-  engineer_wh_usage_dev = {
-    warehouse_name = "DEV_WH"
-    privilege      = "USAGE"
-    roles          = ["DATA_ENGINEER_DEV"]
+  engineer_wh_dev = {
+    role       = "DATA_ENGINEER_DEV"
+    warehouse  = "DEV_WH"
+    privileges = ["USAGE", "OPERATE"]
   }
-  engineer_wh_operate_dev = {
-    warehouse_name = "DEV_WH"
-    privilege      = "OPERATE"
-    roles          = ["DATA_ENGINEER_DEV"]
-  }
-  analyst_wh_usage_dev = {
-    warehouse_name = "ANALYST_WH"
-    privilege      = "USAGE"
-    roles          = ["DATA_ANALYST_DEV"]
+  analyst_wh_dev = {
+    role       = "DATA_ANALYST_DEV"
+    warehouse  = "ANALYST_WH"
+    privileges = ["USAGE"]
   }
 }
 
 # ============================================
 # TABLE GRANTS (specific tables - optional)
 # ============================================
-table_grants = {}
+table_grants = {
+  # Example: Grant engineer access to specific sensitive table
+  # engineer_customers_dev = {
+  #   role       = "DATA_ENGINEER_DEV"
+  #   database   = "ANALYTICS_DEV"
+  #   schema     = "ANALYTICS"
+  #   table      = "CUSTOMERS"
+  #   privileges = ["SELECT"]
+  # }
+}
 
 # ============================================
 # VIEW GRANTS (specific views - optional)
 # ============================================
-view_grants = {}
-
-# ============================================
-# METADATA
-# ============================================
-cost_center = "DATA_ENGINEERING"
-project     = "RBAC_AUTOMATION_DEV"
+view_grants = {
+  # Example: Grant analyst access to specific view
+  # analyst_customer_summary_dev = {
+  #   role       = "DATA_ANALYST_DEV"
+  #   database   = "ANALYTICS_DEV"
+  #   schema     = "ANALYTICS"
+  #   view       = "CUSTOMER_SUMMARY_VW"
+  #   privileges = ["SELECT"]
+  # }
+}
