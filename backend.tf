@@ -4,7 +4,7 @@
 
 terraform {
   cloud {
-    organization = "successekhosuehi"
+    organization = "MY_ORG_SUCC"
 
     workspaces {
       tags = ["snowflake"]
