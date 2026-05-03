@@ -1,16 +1,6 @@
 # main.tf
 # Orchestrates all Snowflake RBAC modules
 
-terraform {
-  required_version = ">= 1.5.0"
-  
-  required_providers {
-    snowflake = {
-      source  = "Snowflake-Labs/snowflake"
-      version = "~> 0.68"
-    }
-  }
-}
 
 
 module "roles" {
