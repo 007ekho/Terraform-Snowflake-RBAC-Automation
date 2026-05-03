@@ -47,8 +47,8 @@ resource "snowflake_grant_privileges_to_account_role" "all_tables_grants" {
   for_each = var.all_tables_grants
 
   account_role_name = upper(each.value.role)
-  privileges        = each.value.privileges
-  all_privileges    = try(each.value.all_privileges, false)
+  privileges     = try(each.value.all_privileges, false) ? null : each.value.privileges
+  all_privileges = try(each.value.all_privileges, false)
   on_schema_object {
     all {
       object_type_plural = "TABLES"
