@@ -2,16 +2,15 @@
 # backend.tf
 # Remote state configuration for multi-environment isolation
 
-   terraform {
-     backend "remote" {
-       hostname     = "app.terraform.io"
-       organization = "MY_ORG_SUCC"  
-       
-       workspaces {
-         prefix = "snowflake-"
-       }
-     }
-   }
+terraform {
+  cloud {
+    organization = "successekhosuehi"
+
+    workspaces {
+      tags = ["snowflake"]
+    }
+  }
+}
 
 
 
