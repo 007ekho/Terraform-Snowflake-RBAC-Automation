@@ -46,3 +46,4 @@ module "object_grants" {
 #   warehouse_size = var.warehouse_size
 # }
 # test
+# test v7
