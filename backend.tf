@@ -5,7 +5,7 @@
    terraform {
      backend "remote" {
        hostname     = "app.terraform.io"
-       organization = "MY_ORG_SUCC"  # ← Your org name from Terraform Cloud
+       organization = "MY_ORG_SUCC"  
        
        workspaces {
          prefix = "snowflake-"
