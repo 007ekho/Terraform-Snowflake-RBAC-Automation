@@ -47,3 +47,4 @@ module "object_grants" {
 #   warehouse_size = var.warehouse_size
 # }
 # Test v5
+# Test v6 - fixed duplicate provider
