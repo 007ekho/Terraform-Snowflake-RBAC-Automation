@@ -9,7 +9,7 @@ on:
     paths:
       - '**.tf'
       - 'environments/**'
-      - '.github/workflows/terraform.yml'
+      - '.github/workflows/snowflake-terraform-cicd.yml'
   
   push:
     branches: ["main", "develop"]
