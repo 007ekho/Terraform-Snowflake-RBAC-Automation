@@ -133,6 +133,7 @@ jobs:
             -no-color
         continue-on-error: true
         env:
+          TF_WORKSPACE: dev 
           TF_VAR_snowflake_organization: ${{ secrets.SNOWFLAKE_ORGANIZATION }}
           TF_VAR_snowflake_account_name: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}
           TF_VAR_snowflake_user: ${{ secrets.SNOWFLAKE_DEV_USER }}
@@ -267,6 +268,7 @@ jobs:
             -no-color
         continue-on-error: true
         env:
+          TF_WORKSPACE: staging
           TF_VAR_snowflake_organization: ${{ secrets.SNOWFLAKE_ORGANIZATION }}
           TF_VAR_snowflake_account_name: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}
           TF_VAR_snowflake_user: ${{ secrets.SNOWFLAKE_STAGING_USER }}
@@ -348,6 +350,7 @@ jobs:
       - name: Terraform Init
         run: terraform init
         env:
+          TF_WORKSPACE: prod
           TF_VAR_snowflake_organization: ${{ secrets.SNOWFLAKE_ORGANIZATION }}
           TF_VAR_snowflake_account_name: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}
           TF_VAR_snowflake_user: ${{ secrets.SNOWFLAKE_PROD_USER }}
