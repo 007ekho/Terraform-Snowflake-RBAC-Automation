@@ -47,3 +47,4 @@ module "object_grants" {
 # }
 # test
 # test v7
+# retry after creating snowflake objects
