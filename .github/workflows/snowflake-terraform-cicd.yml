@@ -202,10 +202,6 @@ jobs:
           terraform_version: 1.5.0
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       
-      - name: Download Plan Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan-dev
       
       - name: Terraform Init
         run: terraform init
@@ -218,7 +214,7 @@ jobs:
           TF_VAR_snowflake_role: "SECURITYADMIN"
       
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan-dev
+        run: terraform apply -var-file="environments/dev.tfvars" -auto-approve
         env:
           TF_WORKSPACE: snowflake-dev
           TF_VAR_snowflake_organization: ${{ secrets.SNOWFLAKE_ORGANIZATION }}
