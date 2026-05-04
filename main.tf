@@ -48,3 +48,5 @@ module "object_grants" {
 # test
 # test v7
 # test apply
+# deploy rbac
+# trigger apply
